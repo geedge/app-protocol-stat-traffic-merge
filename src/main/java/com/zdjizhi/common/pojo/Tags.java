@@ -1,5 +1,7 @@
 package com.zdjizhi.common.pojo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * @author qidaijie
  * @Package com.zdjizhi.common.pojo
@@ -11,16 +13,16 @@ public class Tags {
     private String device_id;
     private String device_group;
     private String data_center;
-    private String protocol_label;
-    private String app_full_path;
+    private String protocol_stack_id;
+    private String app_name;
 
-    public Tags(int vsys_id, String device_id, String device_group, String data_center, String protocol_label, String app_full_path) {
+    public Tags(int vsys_id, String device_id, String device_group, String data_center, String protocol_stack_id, String app_name) {
         this.vsys_id = vsys_id;
         this.device_id = device_id;
         this.device_group = device_group;
         this.data_center = data_center;
-        this.protocol_label = protocol_label;
-        this.app_full_path = app_full_path;
+        this.protocol_stack_id = protocol_stack_id;
+        this.app_name = app_name;
     }
 
     public int getVsys_id() {
@@ -55,19 +57,26 @@ public class Tags {
         this.data_center = data_center;
     }
 
-    public String getProtocol_label() {
-        return protocol_label;
+    public String getProtocol_stack_id() {
+        return protocol_stack_id;
     }
 
-    public void setProtocol_label(String protocol_label) {
-        this.protocol_label = protocol_label;
+    @JSONField(name = "protocol_label")
+    public void setProtocol_stack_id(String protocol_stack_id) {
+        this.protocol_stack_id = protocol_stack_id;
     }
 
-    public String getApp_full_path() {
-        return app_full_path;
+    public String getApp_name() {
+        return app_name;
     }
 
-    public void setApp_full_path(String app_full_path) {
-        this.app_full_path = app_full_path;
+    @JSONField(name = "app_full_path")
+    public void setApp_name(String app_name) {
+        this.app_name = app_name;
+    }
+
+    @Override
+    public String toString() {
+        return vsys_id + device_id + device_group + data_center + protocol_stack_id + app_name;
     }
 }

@@ -4,11 +4,13 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson2.*;
 import com.zdjizhi.utils.JsonMapper;
 import org.apache.datasketches.hll.HllSketch;
+import org.apache.datasketches.hll.TgtHllType;
 import org.apache.datasketches.hll.Union;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.Test;
 
+import java.lang.instrument.Instrumentation;
 import java.util.*;
 
 /**
@@ -161,16 +163,47 @@ public class DatasketchesTest {
         System.out.println("Hutool Byte(Base64):" + JSONObject.toJSONString(dataMap));
         System.out.println(JSONUtil.toJsonStr(dataMap));
 
-
 //        sendMessage(JSONObject.toJSONString(dataMap));
+    }
+
+    @Test
+    public void HllSketchStorageTest() {
+        TgtHllType hllType = TgtHllType.HLL_4;
+//        TgtHllType hllType = TgtHllType.HLL_6;
+//        TgtHllType hllType = TgtHllType.HLL_8;
+
+        HllSketch sketch4 = new HllSketch(4,hllType);
+        HllSketch sketch8 = new HllSketch(8,hllType);
+        HllSketch sketch12 = new HllSketch(12,hllType);
+        HllSketch sketch16 = new HllSketch(16,hllType);
+        HllSketch sketch21 = new HllSketch(21,hllType);
+
+        HashSet<String> IPSet = new HashSet<>();
+
+        for (int i = 0; i < 500000; i++) {
+            String ip = makeIPv4Random();
+            IPSet.add(ip);
+            sketch4.update(ip);
+            sketch8.update(ip);
+            sketch12.update(ip);
+            sketch16.update(ip);
+            sketch21.update(ip);
+        }
+        System.out.println(IPSet.size());
+        System.out.println(sketch4.toString());
+        System.out.println(sketch8.toString());
+        System.out.println(sketch12.toString());
+        System.out.println(sketch16.toString());
+        System.out.println(sketch21.toString());
+
     }
 
 
     //随机生成ip
     private static String makeIPv4Random() {
         int v4_1 = new Random().nextInt(255) + 1;
-        int v4_2 = new Random().nextInt(255);
-        int v4_3 = new Random().nextInt(255);
+        int v4_2 = new Random().nextInt(100);
+        int v4_3 = new Random().nextInt(100);
         int v4_4 = new Random().nextInt(255);
         return v4_1 + "." + v4_2 + "." + v4_3 + "." + v4_4;
     }

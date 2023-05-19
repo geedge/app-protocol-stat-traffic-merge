@@ -1,9 +1,8 @@
 package com.zdjizhi.utils.general;
 
-
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import com.zdjizhi.common.pojo.AppProtocol;
+import com.zdjizhi.common.pojo.Fields;
 import com.zdjizhi.utils.StringUtil;
 import org.apache.datasketches.hll.HllSketch;
 import org.apache.datasketches.hll.Union;
@@ -27,35 +26,47 @@ public class MetricUtil {
      * @param cacheData 缓存中数据
      * @param newData   新数据
      */
-    public static void statisticsMetrics(AppProtocol cacheData, AppProtocol newData) {
-        cacheData.setSessions(MetricUtil.longSum(cacheData.getSessions(), newData.getSessions()));
+    public static Fields statisticsMetrics(Fields cacheData, Fields newData) {
 
-        cacheData.setIn_bytes(MetricUtil.longSum(cacheData.getIn_bytes(), newData.getIn_bytes()));
-        cacheData.setOut_pkts(MetricUtil.longSum(cacheData.getOut_bytes(), newData.getOut_bytes()));
-        cacheData.setIn_pkts(MetricUtil.longSum(cacheData.getIn_pkts(), newData.getIn_pkts()));
-        cacheData.setOut_pkts(MetricUtil.longSum(cacheData.getOut_pkts(), newData.getOut_pkts()));
+        Long sessions = MetricUtil.longSum(cacheData.getSessions(), newData.getSessions());
 
-        cacheData.setC2s_bytes(MetricUtil.longSum(cacheData.getC2s_bytes(), newData.getC2s_bytes()));
-        cacheData.setS2c_bytes(MetricUtil.longSum(cacheData.getS2c_bytes(), newData.getS2c_bytes()));
-        cacheData.setC2s_pkts(MetricUtil.longSum(cacheData.getC2s_pkts(), newData.getC2s_pkts()));
-        cacheData.setS2c_pkts(MetricUtil.longSum(cacheData.getS2c_pkts(), newData.getS2c_pkts()));
+        Long inBytes = MetricUtil.longSum(cacheData.getIn_bytes(), newData.getIn_bytes());
+        Long outBytes = MetricUtil.longSum(cacheData.getOut_bytes(), newData.getOut_bytes());
+        Long inPkts = MetricUtil.longSum(cacheData.getIn_pkts(), newData.getIn_pkts());
+        Long outPkts = MetricUtil.longSum(cacheData.getOut_pkts(), newData.getOut_pkts());
 
-        cacheData.setC2s_fragments(MetricUtil.longSum(cacheData.getC2s_fragments(), newData.getC2s_fragments()));
-        cacheData.setS2c_fragments(MetricUtil.longSum(cacheData.getS2c_fragments(), newData.getS2c_fragments()));
 
-        cacheData.setC2s_tcp_lost_bytes(MetricUtil.longSum(cacheData.getC2s_tcp_lost_bytes(), newData.getC2s_tcp_lost_bytes()));
-        cacheData.setS2c_tcp_lost_bytes(MetricUtil.longSum(cacheData.getS2c_tcp_lost_bytes(), newData.getS2c_tcp_lost_bytes()));
+        Long c2sBytes = MetricUtil.longSum(cacheData.getC2s_bytes(), newData.getC2s_bytes());
+        Long s2cBytes = MetricUtil.longSum(cacheData.getS2c_bytes(), newData.getS2c_bytes());
+        Long c2sPkts = MetricUtil.longSum(cacheData.getC2s_pkts(), newData.getC2s_pkts());
+        Long s2cPkts = MetricUtil.longSum(cacheData.getS2c_pkts(), newData.getS2c_pkts());
 
-        cacheData.setC2s_tcp_ooorder_pkts(MetricUtil.longSum(cacheData.getC2s_tcp_ooorder_pkts(), newData.getC2s_tcp_ooorder_pkts()));
-        cacheData.setS2c_tcp_ooorder_pkts(MetricUtil.longSum(cacheData.getS2c_tcp_ooorder_pkts(), newData.getS2c_tcp_ooorder_pkts()));
+        Long c2sFragments = MetricUtil.longSum(cacheData.getC2s_fragments(), newData.getC2s_fragments());
+        Long s2cFragments = MetricUtil.longSum(cacheData.getS2c_fragments(), newData.getS2c_fragments());
 
-        cacheData.setC2s_tcp_retransmitted_bytes(MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes()));
-        cacheData.setS2c_tcp_retransmitted_bytes(MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes()));
+        Long c2sTcpLostBytes = MetricUtil.longSum(cacheData.getC2s_tcp_lost_bytes(), newData.getC2s_tcp_lost_bytes());
+        Long s2cTcpLostBytes = MetricUtil.longSum(cacheData.getS2c_tcp_lost_bytes(), newData.getS2c_tcp_lost_bytes());
 
-        cacheData.setC2s_tcp_retransmitted_pkts(MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_pkts(), newData.getC2s_tcp_retransmitted_pkts()));
-        cacheData.setS2c_tcp_retransmitted_pkts(MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_pkts(), newData.getS2c_tcp_retransmitted_pkts()));
+        Long c2sTcpooorderPkts = MetricUtil.longSum(cacheData.getC2s_tcp_ooorder_pkts(), newData.getC2s_tcp_ooorder_pkts());
+        Long s2cTcpooorderPkts = MetricUtil.longSum(cacheData.getS2c_tcp_ooorder_pkts(), newData.getS2c_tcp_ooorder_pkts());
 
-        cacheData.setClient_ip_sketch(MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch()));
+        Long c2sTcpretransmittedPkts = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_pkts(), newData.getC2s_tcp_retransmitted_pkts());
+        Long s2cTcpretransmittedPkts = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_pkts(), newData.getS2c_tcp_retransmitted_pkts());
+
+        Long c2sTcpretransmittedBytes = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes());
+        Long s2cTcpretransmittedBytes = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes());
+
+        String clientIpSketch = MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch());
+
+        return new Fields(sessions,
+                inBytes, outBytes, inPkts, outPkts,
+                c2sPkts, s2cPkts, c2sBytes, s2cBytes,
+                c2sFragments, s2cFragments,
+                c2sTcpLostBytes, s2cTcpLostBytes,
+                c2sTcpooorderPkts, s2cTcpooorderPkts,
+                c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
+                c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
+                clientIpSketch);
     }
 
     /**
@@ -66,9 +77,9 @@ public class MetricUtil {
      * @return value1 + value2
      */
     private static Long longSum(Long value1, Long value2) {
-        Long result = 0L;
+        Long result;
         try {
-            if (value1 > 0 && value2 > 0) {
+            if (value1 >= 0 && value2 >= 0) {
                 result = value1 + value2;
             } else {
                 result = value1;

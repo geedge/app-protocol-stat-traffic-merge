@@ -1,4 +1,4 @@
-package com.zdjizhi.common.pojo;
+package com.zdjizhi;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -36,6 +36,36 @@ public class AppProtocol {
     private Long c2s_tcp_retransmitted_bytes;
     private Long s2c_tcp_retransmitted_bytes;
     private String client_ip_sketch;
+
+    public AppProtocol(Long timestamp, int vsys_id, String device_id, String device_group, String data_center, String protocol_stack_id, String app_name, Long sessions, Long in_bytes, Long out_bytes, Long in_pkts, Long out_pkts, Long c2s_pkts, Long s2c_pkts, Long c2s_bytes, Long s2c_bytes, Long c2s_fragments, Long s2c_fragments, Long c2s_tcp_lost_bytes, Long s2c_tcp_lost_bytes, Long c2s_tcp_ooorder_pkts, Long s2c_tcp_ooorder_pkts, Long c2s_tcp_retransmitted_pkts, Long s2c_tcp_retransmitted_pkts, Long c2s_tcp_retransmitted_bytes, Long s2c_tcp_retransmitted_bytes, String client_ip_sketch) {
+        this.timestamp = timestamp;
+        this.vsys_id = vsys_id;
+        this.device_id = device_id;
+        this.device_group = device_group;
+        this.data_center = data_center;
+        this.protocol_stack_id = protocol_stack_id;
+        this.app_name = app_name;
+        this.sessions = sessions;
+        this.in_bytes = in_bytes;
+        this.out_bytes = out_bytes;
+        this.in_pkts = in_pkts;
+        this.out_pkts = out_pkts;
+        this.c2s_pkts = c2s_pkts;
+        this.s2c_pkts = s2c_pkts;
+        this.c2s_bytes = c2s_bytes;
+        this.s2c_bytes = s2c_bytes;
+        this.c2s_fragments = c2s_fragments;
+        this.s2c_fragments = s2c_fragments;
+        this.c2s_tcp_lost_bytes = c2s_tcp_lost_bytes;
+        this.s2c_tcp_lost_bytes = s2c_tcp_lost_bytes;
+        this.c2s_tcp_ooorder_pkts = c2s_tcp_ooorder_pkts;
+        this.s2c_tcp_ooorder_pkts = s2c_tcp_ooorder_pkts;
+        this.c2s_tcp_retransmitted_pkts = c2s_tcp_retransmitted_pkts;
+        this.s2c_tcp_retransmitted_pkts = s2c_tcp_retransmitted_pkts;
+        this.c2s_tcp_retransmitted_bytes = c2s_tcp_retransmitted_bytes;
+        this.s2c_tcp_retransmitted_bytes = s2c_tcp_retransmitted_bytes;
+        this.client_ip_sketch = client_ip_sketch;
+    }
 
     public Long getTimestamp() {
         return timestamp;

@@ -5,9 +5,9 @@ import cn.hutool.log.LogFactory;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.zdjizhi.common.config.GlobalConfig;
-import com.zdjizhi.common.pojo.AppProtocol;
+import com.zdjizhi.common.pojo.Metrics;
+import com.zdjizhi.common.pojo.Tags;
 import com.zdjizhi.utils.StringUtil;
-import com.zdjizhi.utils.general.FormatConverterUtil;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 
@@ -17,20 +17,16 @@ import org.apache.flink.util.Collector;
  * @Description:
  * @date 2021/7/2114:52
  */
-public class ResultFlatMap implements FlatMapFunction<AppProtocol, String> {
+public class ResultFlatMap implements FlatMapFunction<Metrics, String> {
     private static final Log logger = LogFactory.get();
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void flatMap(AppProtocol appProtocol, Collector<String> out) throws Exception {
+    public void flatMap(Metrics metrics, Collector<String> out) throws Exception {
         try {
-            JSONObject tags = FormatConverterUtil.getTags(appProtocol);
-            JSONObject conversion = FormatConverterUtil.structureConversion(appProtocol);
-
-            String protocolStackId = tags.getString("protocol_stack_id");
-
-            out.collect(FormatConverterUtil.updateTagsData(conversion, tags));
-            tags.remove("app_name");
+            Tags tags = metrics.getTags();
+            String protocolStackId = tags.getProtocol_stack_id();
+            out.collect(getResultJson(metrics));
+            tags.setApp_name(null);
 
             StringBuilder stringBuilder = new StringBuilder();
             String[] protocolIds = protocolStackId.split(GlobalConfig.PROTOCOL_SPLITTER);
@@ -38,18 +34,25 @@ public class ResultFlatMap implements FlatMapFunction<AppProtocol, String> {
             for (int i = 0; i < protocolIdsNum - 1; i++) {
                 if (StringUtil.isBlank(stringBuilder.toString())) {
                     stringBuilder.append(protocolIds[i]);
-                    tags.put("protocol_stack_id", stringBuilder.toString());
-                    out.collect(FormatConverterUtil.updateTagsData(conversion, tags));
+                    tags.setProtocol_stack_id(stringBuilder.toString());
+                    metrics.setTags(tags);
+                    out.collect(getResultJson(metrics));
                 } else {
                     stringBuilder.append(".").append(protocolIds[i]);
-                    tags.put("protocol_stack_id", stringBuilder.toString());
-                    conversion.put("tags", tags);
-                    out.collect(FormatConverterUtil.updateTagsData(conversion, tags));
+                    tags.setProtocol_stack_id(stringBuilder.toString());
+                    metrics.setTags(tags);
+                    out.collect(getResultJson(metrics));
                 }
             }
         } catch (RuntimeException e) {
             logger.error("An exception occurred during parsing the result data,error message is:" + e);
             e.printStackTrace();
         }
+    }
+
+    private static String getResultJson(Metrics metrics) {
+        return JSONObject.toJSONString(metrics
+                , JSONWriter.Feature.WriteNullStringAsEmpty
+                , JSONWriter.Feature.WriteNullNumberAsZero);
     }
 }

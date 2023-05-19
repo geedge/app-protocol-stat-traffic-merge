@@ -13,26 +13,26 @@ import java.util.Properties;
 
 public final class GlobalConfigLoad {
 
-    private static Properties propKafka = new Properties();
+    private static Properties propDefault = new Properties();
     private static Properties propService = new Properties();
 
 
-    public static String getStringProperty(Integer type, String key) {
+    static String getStringProperty(Integer type, String key) {
         if (type == 0) {
             return propService.getProperty(key);
         } else if (type == 1) {
-            return propKafka.getProperty(key);
+            return propDefault.getProperty(key);
         } else {
             return null;
         }
 
     }
 
-    public static Integer getIntProperty(Integer type, String key) {
+    static Integer getIntProperty(Integer type, String key) {
         if (type == 0) {
             return Integer.parseInt(propService.getProperty(key));
         } else if (type == 1) {
-            return Integer.parseInt(propKafka.getProperty(key));
+            return Integer.parseInt(propDefault.getProperty(key));
         } else {
             return null;
         }
@@ -42,7 +42,7 @@ public final class GlobalConfigLoad {
         if (type == 0) {
             return Long.parseLong(propService.getProperty(key));
         } else if (type == 1) {
-            return Long.parseLong(propKafka.getProperty(key));
+            return Long.parseLong(propDefault.getProperty(key));
         } else {
             return null;
         }
@@ -52,7 +52,7 @@ public final class GlobalConfigLoad {
         if (type == 0) {
             return StringUtil.equals(propService.getProperty(key).toLowerCase().trim().toUpperCase(Locale.ENGLISH), "true");
         } else if (type == 1) {
-            return StringUtil.equals(propKafka.getProperty(key).toLowerCase().trim().toUpperCase(Locale.ENGLISH), "true");
+            return StringUtil.equals(propDefault.getProperty(key).toLowerCase().trim().toUpperCase(Locale.ENGLISH), "true");
         } else {
             return null;
         }
@@ -61,9 +61,9 @@ public final class GlobalConfigLoad {
     static {
         try {
             propService.load(GlobalConfigLoad.class.getClassLoader().getResourceAsStream("service_flow_config.properties"));
-            propKafka.load(GlobalConfigLoad.class.getClassLoader().getResourceAsStream("default_config.properties"));
+            propDefault.load(GlobalConfigLoad.class.getClassLoader().getResourceAsStream("default_config.properties"));
         } catch (IOException | RuntimeException e) {
-            propKafka = null;
+            propDefault = null;
             propService = null;
         }
     }

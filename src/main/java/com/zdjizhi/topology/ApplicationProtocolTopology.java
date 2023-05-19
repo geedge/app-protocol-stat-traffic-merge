@@ -3,7 +3,9 @@ package com.zdjizhi.topology;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.zdjizhi.common.config.GlobalConfig;
-import com.zdjizhi.common.pojo.AppProtocol;
+import com.zdjizhi.common.pojo.Fields;
+import com.zdjizhi.common.pojo.Metrics;
+import com.zdjizhi.common.pojo.Tags;
 import com.zdjizhi.utils.functions.filter.DataTypeFilter;
 import com.zdjizhi.utils.functions.keyby.DimensionKeyBy;
 import com.zdjizhi.utils.functions.map.MetricsParseMap;
@@ -41,10 +43,10 @@ public class ApplicationProtocolTopology {
                     .name("appProtocolFilter").setParallelism(GlobalConfig.SOURCE_PARALLELISM);
 
 
-            SingleOutputStreamOperator<Tuple2<String, AppProtocol>> parseDataMap = appProtocolFilter.map(new MetricsParseMap())
+            SingleOutputStreamOperator<Tuple2<Tags, Fields>> parseDataMap = appProtocolFilter.map(new MetricsParseMap())
                     .name("ParseDataMap").setParallelism(GlobalConfig.PARSE_PARALLELISM);
 
-            SingleOutputStreamOperator<AppProtocol> dispersionCountWindow = parseDataMap.keyBy(new DimensionKeyBy())
+            SingleOutputStreamOperator<Metrics> dispersionCountWindow = parseDataMap.keyBy(new DimensionKeyBy())
                     .window(TumblingProcessingTimeWindows.of(Time.seconds(GlobalConfig.COUNT_WINDOW_TIME)))
                     .reduce(new DispersionCountWindow(), new MergeCountWindow())
                     .name("DispersionCountWindow")

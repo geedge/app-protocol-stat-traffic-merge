@@ -6,7 +6,7 @@
 
     <groupId>com.zdjizhi</groupId>
     <artifactId>app-protocol-stat-traffic-merge</artifactId>
-    <version>230506</version>
+    <version>230516</version>
 
     <name>app-protocol-stat-traffic-merge</name>
     <url>http://www.example.com</url>
@@ -35,10 +35,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flink.version>1.13.1</flink.version>
-        <hadoop.version>2.7.1</hadoop.version>
         <kafka.version>1.0.0</kafka.version>
-        <hbase.version>2.2.3</hbase.version>
         <nacos.version>1.2.0</nacos.version>
+        <hutool.version>5.7.17</hutool.version>
+        <datasketches.version>3.2.0</datasketches.version>
+        <jasypt.version>1.9.3</jasypt.version>
         <zdjz.tools.version>1.0.8</zdjz.tools.version>
         <fastjson.version>2.0.26</fastjson.version>
         <scope.type>provided</scope.type>
@@ -115,6 +116,18 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.3.2</version>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.zdjizhi</groupId>
@@ -174,29 +187,16 @@
         </dependency>
 
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>3.2.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.3.2</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.7.17</version>
+            <version>${hutool.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
-            <version>1.9.3</version>
+            <version>${jasypt.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.alibaba.nacos/nacos-client -->
@@ -230,7 +230,7 @@
         <dependency>
             <groupId>org.apache.datasketches</groupId>
             <artifactId>datasketches-java</artifactId>
-            <version>3.2.0</version>
+            <version>${datasketches.version}</version>
         </dependency>
 
         <dependency>
