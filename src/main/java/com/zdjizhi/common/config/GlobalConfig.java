@@ -30,6 +30,7 @@ public class GlobalConfig {
     public static final Integer COUNT_WINDOW_TIME = GlobalConfigLoad.getIntProperty(0, "count.window.time");
     public static final String TOOLS_LIBRARY = GlobalConfigLoad.getStringProperty(0, "tools.library");
     public static final Integer SINK_PARALLELISM = GlobalConfigLoad.getIntProperty(0, "sink.parallelism");
+    public static final String METICS_DATA_SOURCE = GlobalConfigLoad.getStringProperty(0, "metrics.data.source");
 
     /**
      * Kafka common

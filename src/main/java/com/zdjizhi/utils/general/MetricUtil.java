@@ -2,6 +2,7 @@ package com.zdjizhi.utils.general;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.zdjizhi.common.config.GlobalConfig;
 import com.zdjizhi.common.pojo.Fields;
 import com.zdjizhi.utils.StringUtil;
 import org.apache.datasketches.hll.HllSketch;
@@ -18,6 +19,7 @@ import java.util.Base64;
  */
 public class MetricUtil {
     private static final Log logger = LogFactory.get();
+    private static final String METRICS_DEFAULT_TYPE = "agent";
 
 
     /**
@@ -56,17 +58,28 @@ public class MetricUtil {
         Long c2sTcpretransmittedBytes = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes());
         Long s2cTcpretransmittedBytes = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes());
 
-        String clientIpSketch = MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch());
-
-        return new Fields(sessions,
-                inBytes, outBytes, inPkts, outPkts,
-                c2sPkts, s2cPkts, c2sBytes, s2cBytes,
-                c2sFragments, s2cFragments,
-                c2sTcpLostBytes, s2cTcpLostBytes,
-                c2sTcpooorderPkts, s2cTcpooorderPkts,
-                c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
-                c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
-                clientIpSketch);
+        if (METRICS_DEFAULT_TYPE.equals(GlobalConfig.METICS_DATA_SOURCE)) {
+            String clientIpSketch = MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch());
+            return new Fields(sessions,
+                    inBytes, outBytes, inPkts, outPkts,
+                    c2sPkts, s2cPkts, c2sBytes, s2cBytes,
+                    c2sFragments, s2cFragments,
+                    c2sTcpLostBytes, s2cTcpLostBytes,
+                    c2sTcpooorderPkts, s2cTcpooorderPkts,
+                    c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
+                    c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
+                    clientIpSketch);
+        } else {
+            return new Fields(sessions,
+                    inBytes, outBytes, inPkts, outPkts,
+                    c2sPkts, s2cPkts, c2sBytes, s2cBytes,
+                    c2sFragments, s2cFragments,
+                    c2sTcpLostBytes, s2cTcpLostBytes,
+                    c2sTcpooorderPkts, s2cTcpooorderPkts,
+                    c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
+                    c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
+                    null);
+        }
     }
 
     /**

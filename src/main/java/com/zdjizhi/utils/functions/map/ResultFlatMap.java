@@ -5,6 +5,7 @@ import cn.hutool.log.LogFactory;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.zdjizhi.common.config.GlobalConfig;
+import com.zdjizhi.common.pojo.Fields;
 import com.zdjizhi.common.pojo.Metrics;
 import com.zdjizhi.common.pojo.Tags;
 import com.zdjizhi.utils.StringUtil;
@@ -51,8 +52,6 @@ public class ResultFlatMap implements FlatMapFunction<Metrics, String> {
     }
 
     private static String getResultJson(Metrics metrics) {
-        return JSONObject.toJSONString(metrics
-                , JSONWriter.Feature.WriteNullStringAsEmpty
-                , JSONWriter.Feature.WriteNullNumberAsZero);
+        return JSONObject.toJSONString(metrics);
     }
 }
