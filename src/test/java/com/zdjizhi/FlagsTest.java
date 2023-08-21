@@ -43,9 +43,12 @@ public class FlagsTest {
         common_flags = 16400L;
 
         System.out.println("common_flags & clientIsLocal = " + (common_flags & clientIsLocal));
-        System.out.println("common_flags & serverIsLocal = " + (common_flags & serverIsLocal));
+        System.out.println("common_flags & serverIsLocal = " + (common_flags & serverIsLocal)+"\n\n");
 
+        common_flags = 1062135466L;
 
+        System.out.println("common_flags & clientIsLocal = " + (common_flags & 128));
+        System.out.println("common_flags & serverIsLocal = " + (common_flags & 256)+"\n\n");
 
         if ((0L & clientIsLocal) == 0L){
             System.out.println("yes");
