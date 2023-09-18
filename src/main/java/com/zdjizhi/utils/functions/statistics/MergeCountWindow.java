@@ -24,11 +24,11 @@ public class MergeCountWindow extends ProcessWindowFunction<Tuple3<Tags, Fields,
     @Override
     public void process(String windowKey, Context context, Iterable<Tuple3<Tags, Fields,Long>> input, Collector<Metrics> output) throws Exception {
         try {
-            long timestamp = context.window().getStart();
+            long timestamp_ms = context.window().getStart();
             for (Tuple3<Tags, Fields,Long> tuple : input) {
                 Tags tags = tuple.f0;
                 Fields fields = tuple.f1;
-                Metrics metrics = new Metrics(GlobalConfig.MEASUREMENT_NAME, tags, fields, timestamp);
+                Metrics metrics = new Metrics(GlobalConfig.MEASUREMENT_NAME, tags, fields, timestamp_ms);
                 output.collect(metrics);
             }
 

@@ -10,14 +10,14 @@ public class Metrics {
     private String name;
     private Tags tags;
     private Fields fields;
-    private long timestamp;
+    private long timestamp_ms;
 
 
-    public Metrics(String name, Tags tags, Fields fields, long timestamp) {
+    public Metrics(String name, Tags tags, Fields fields, long timestamp_ms) {
         this.name = name;
         this.tags = tags;
         this.fields = fields;
-        this.timestamp = timestamp;
+        this.timestamp_ms = timestamp_ms;
     }
 
     public String getName() {
@@ -44,11 +44,11 @@ public class Metrics {
         this.fields = fields;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public long getTimestamp_ms() {
+        return timestamp_ms;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp_ms(long timestamp_ms) {
+        this.timestamp_ms = timestamp_ms;
     }
 }

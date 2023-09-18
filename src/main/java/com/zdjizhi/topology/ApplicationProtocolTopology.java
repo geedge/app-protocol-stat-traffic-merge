@@ -15,6 +15,8 @@ import com.zdjizhi.utils.kafka.KafkaConsumer;
 import com.zdjizhi.utils.kafka.KafkaProducer;
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -65,7 +67,7 @@ public class ApplicationProtocolTopology {
             resultFlatMap.addSink(KafkaProducer.getKafkaProducer())
                     .setParallelism(GlobalConfig.SINK_PARALLELISM).name(GlobalConfig.SINK_KAFKA_TOPIC);
 
-            environment.execute(args[0]);
+            environment.execute("APP-PROTOCOL-STAT-TRAFFIC-MERGE");
         } catch (Exception e) {
             logger.error("This Flink task start ERROR! Exception information is :");
             e.printStackTrace();

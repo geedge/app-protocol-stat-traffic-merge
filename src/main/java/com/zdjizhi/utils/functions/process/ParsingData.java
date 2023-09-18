@@ -26,7 +26,7 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
                     JSONObject originalLog = JSON.parseObject(value);
                     Fields fields = JSONObject.parseObject(originalLog.getString("fields"), Fields.class);
                     Tags tags = JSONObject.parseObject(originalLog.getString("tags"), Tags.class);
-                    Long timestamp = originalLog.getLong("timestamp");
+                    Long timestamp_ms = originalLog.getLong("timestamp_ms");
 
                     String appFullPath = tags.getApp_name();
                     if (StringUtil.isNotBlank(appFullPath)) {
@@ -37,7 +37,7 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
                         tags.setProtocol_stack_id(protocolLabel.concat(".").concat(appFullPath));
                     }
 
-                    out.collect(new Tuple3<>(tags, fields, timestamp));
+                    out.collect(new Tuple3<>(tags, fields, timestamp_ms));
                 }
             }
         } catch (RuntimeException e) {

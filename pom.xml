@@ -6,7 +6,7 @@
 
     <groupId>com.zdjizhi</groupId>
     <artifactId>app-protocol-stat-traffic-merge</artifactId>
-    <version>230821</version>
+    <version>1.6</version>
 
     <name>app-protocol-stat-traffic-merge</name>
     <url>http://www.example.com</url>
@@ -197,27 +197,6 @@
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
             <version>${jasypt.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.alibaba.nacos/nacos-client -->
-        <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-client</artifactId>
-            <version>${nacos.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j-over-slf4j</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
