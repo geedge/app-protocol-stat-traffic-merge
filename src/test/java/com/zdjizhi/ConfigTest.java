@@ -1,11 +1,10 @@
 package com.zdjizhi;
 
 import com.zdjizhi.conf.FusionConfiguration;
+import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
@@ -30,6 +29,7 @@ public class ConfigTest {
             System.out.println(fusionConfiguration.getProperties(SOURCE_KAFKA_PROPERTIES_PREFIX));
             System.out.println(fusionConfiguration.getProperties(SINK_KAFKA_PROPERTIES_PREFIX));
 
+
             final FlinkKafkaConsumer<String> kafkaConsumer = new FlinkKafkaConsumer<>(
                     config.get(SOURCE_KAFKA_TOPIC),
                     new SimpleStringSchema(),
@@ -41,11 +41,13 @@ public class ConfigTest {
             sourceStream.process(new ProcessFunction<String, String>() {
 
                 @Override
-                public void processElement(String value, ProcessFunction<String, String>.Context ctx, Collector<String> out) throws Exception {
+                public void processElement(String value, ProcessFunction<String, String>.Context ctx, Collector<String> out) {
 
                     out.collect(value);
                 }
             }).print();
+
+
 
             environment.execute();
 

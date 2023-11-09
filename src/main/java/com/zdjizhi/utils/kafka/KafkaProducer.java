@@ -1,9 +1,7 @@
 package com.zdjizhi.utils.kafka;
 
-import com.zdjizhi.common.config.GlobalConfig;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 
 import java.util.Optional;
 import java.util.Properties;
@@ -16,33 +14,29 @@ import java.util.Properties;
  */
 public class KafkaProducer {
 
-    private static Properties createProducerConfig() {
-        Properties properties = new Properties();
-        properties.put("bootstrap.servers", GlobalConfig.SINK_KAFKA_SERVERS);
-        properties.put("acks", GlobalConfig.PRODUCER_ACK);
-        properties.put("retries", GlobalConfig.RETRIES);
-        properties.put("linger.ms", GlobalConfig.LINGER_MS);
-        properties.put("request.timeout.ms", GlobalConfig.REQUEST_TIMEOUT_MS);
-        properties.put("batch.size", GlobalConfig.BATCH_SIZE);
-        properties.put("buffer.memory", GlobalConfig.BUFFER_MEMORY);
-        properties.put("max.request.size", GlobalConfig.MAX_REQUEST_SIZE);
-        properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, GlobalConfig.PRODUCER_KAFKA_COMPRESSION_TYPE);
+    public static FlinkKafkaProducer<String> getKafkaProducer(Properties properties, String topic, boolean logFailuresOnly) {
+        setDefaultConfig(properties, "ack", 1);
+        setDefaultConfig(properties, "retries", 0);
+        setDefaultConfig(properties, "linger.ms", 10);
+        setDefaultConfig(properties, "request.timeout.ms", 30000);
+        setDefaultConfig(properties, "batch.size", 262144);
+        setDefaultConfig(properties, "buffer.memory", 134217728);
+        setDefaultConfig(properties, "max.request.size", 10485760);
+        setDefaultConfig(properties, "compression.type", "snappy");
 
-        CertUtils.chooseCert(GlobalConfig.SINK_KAFKA_SERVERS, properties);
-
-        return properties;
-    }
-
-
-    public static FlinkKafkaProducer<String> getKafkaProducer() {
-        FlinkKafkaProducer<String> kafkaProducer = new FlinkKafkaProducer<String>(
-                GlobalConfig.SINK_KAFKA_TOPIC,
+        FlinkKafkaProducer<String> kafkaProducer = new FlinkKafkaProducer<>(
+                topic,
                 new SimpleStringSchema(),
-                createProducerConfig(), Optional.empty());
+                properties, Optional.empty());
 
-        //启用此选项将使生产者仅记录失败日志而不是捕获和重新抛出它们
-        kafkaProducer.setLogFailuresOnly(true);
+        kafkaProducer.setLogFailuresOnly(logFailuresOnly);
 
         return kafkaProducer;
+    }
+
+    private static void setDefaultConfig(Properties properties, String key, Object value) {
+        if (!properties.contains(key)) {
+            properties.put(key, value);
+        }
     }
 }

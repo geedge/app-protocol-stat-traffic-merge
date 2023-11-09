@@ -1,6 +1,5 @@
 package com.zdjizhi;
 
-import com.zdjizhi.common.config.GlobalConfig;
 import com.zdjizhi.utils.StringUtil;
 import org.junit.Test;
 
@@ -22,7 +21,7 @@ public class ConventionalTest {
         System.out.println(protocol);
         StringBuffer stringBuffer = new StringBuffer();
         String appName = "qq_r2";
-        String[] protocolIds = protocol.split(GlobalConfig.PROTOCOL_SPLITTER);
+        String[] protocolIds = protocol.split("\\.");
         for (String proto : protocolIds) {
             if (StringUtil.isBlank(stringBuffer.toString())) {
                 stringBuffer.append(proto);

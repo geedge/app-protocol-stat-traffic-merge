@@ -19,8 +19,9 @@ import org.apache.flink.api.java.tuple.Tuple3;
 public class DispersionCountWindow implements ReduceFunction<Tuple3<Tags, Fields, Long>> {
     private static final Log logger = LogFactory.get();
 
+
     @Override
-    public Tuple3<Tags, Fields, Long> reduce(Tuple3<Tags, Fields, Long> value1, Tuple3<Tags, Fields, Long> value2) throws Exception {
+    public Tuple3<Tags, Fields, Long> reduce(Tuple3<Tags, Fields, Long> value1, Tuple3<Tags, Fields, Long> value2) {
         try {
             Fields cacheData = value1.f1;
             Fields newData = value2.f1;
