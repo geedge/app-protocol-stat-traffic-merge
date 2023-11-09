@@ -61,5 +61,5 @@ Yarn:
 |sink.kafka.props.*|STRING|N||数据输出的Kafka 生产者连接相关参数|
 |count.window.time|INT|N|5|聚合窗口大小（单位：秒）|
 |watermark.max.orderness|INT|N|5|乱序数据的最大延迟时间（单位：秒）|
-|log.failures.only|BOOLEAN|N|false|生产者出现错误时任务失败，还是只记录错误信息|
+|log.failures.only|BOOLEAN|N|false|true：生产者出现错误时任务失败，false：只记录错误信息|
 |measurement.name|STRING|N|application_protocol_stat|数据输出时的指标标识名称|
