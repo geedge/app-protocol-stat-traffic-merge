@@ -2,7 +2,7 @@
 
 Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到协议与应用统计表中，使用增量窗口计算，统计周期5秒，watermark5秒。
 
-## 数据源    
+## 数据     
 
 以下不论基于哪种计算，Topic均为NETWORK-TRAFFIC-METRICS 
 
@@ -10,7 +10,9 @@ Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到�
 
 ### 2.功能端进行统计产生的Application and Protocol Metrics数据，聚合粒度为1秒。（≥TSG 23.05版本）
 
-## 操作
+<br/>
+
+## 简介  
 
 ### 1.过滤Measurement Name是traffic_application_protocol_stat的数据。
 
@@ -40,11 +42,11 @@ Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到�
 
 ## 启动
 
-Standalone:  
+###  Standalone:  
 
 `flink run [-p parallelism] -c com.zdjizhi.topology.ApplicationProtocolTopology app-protocol-stat-traffic-merge-[version].jar app.properties`
 
-Yarn:
+###  Yarn:
 
 `flink run -t yarn-per-job -Djobmanager.memory.process.size=1024m -Dtaskmanager.memory.process.size=2048m -Dyarn.application.name=APP-PROTOCOL-STAT-TRAFFIC-MERGE  -Dtaskmanager.numberOfTaskSlots=1 -d -p 3 -c com.zdjizhi.topology.ApplicationProtocolTopology app-protocol-stat-traffic-merge-[version].jar app.properties`
 
