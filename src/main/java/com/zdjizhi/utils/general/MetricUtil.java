@@ -55,6 +55,7 @@ public class MetricUtil {
         Long c2sTcpretransmittedBytes = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes());
         Long s2cTcpretransmittedBytes = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes());
 
+
 //            String clientIpSketch = MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch());
 //            return new Fields(sessions,
 //                    inBytes, outBytes, inPkts, outPkts,
@@ -80,21 +81,22 @@ public class MetricUtil {
     /**
      * Long类型的数据求和
      *
-     * @param value1 第一个值
-     * @param value2 第二个值
-     * @return value1 + value2
+     * @param cacheData 缓存中的值
+     * @param newData 新来数据的值
+     * @return cacheData + newData
      */
-    private static Long longSum(Long value1, Long value2) {
+    private static Long longSum(Long cacheData, Long newData) {
+
         Long result;
         try {
-            if (value1 >= 0 && value2 >= 0) {
-                result = value1 + value2;
+            if (cacheData >= 0 && newData >= 0) {
+                result = cacheData + newData;
             } else {
-                result = value1;
+                result = cacheData;
             }
         } catch (RuntimeException e) {
-            logger.error("Abnormal sending of traffic indicator statistics! The message is:" + e.getMessage());
-            result = value1;
+            logger.error("Abnormal sending of traffic indicator statistics! The message is:{}" , e);
+            result = cacheData;
         }
         return result;
 

@@ -69,4 +69,5 @@ public class MergeConfigs {
                     .stringType()
                     .defaultValue("application_protocol_stat")
                     .withDescription("The data identification.");
+
 }

@@ -32,29 +32,25 @@ public class FlagsTest {
 
     @Test
     public void bitwiseAND() {
-        Long common_flags = 8200L;
+        Long flags = 24712L;
         Long clientIsLocal = 8L;
         Long serverIsLocal = 16L;
 
 
-        System.out.println("common_flags & clientIsLocal = " + (common_flags & clientIsLocal));
-        System.out.println("common_flags & serverIsLocal = " + (common_flags & serverIsLocal)+"\n\n");
+        System.out.println("flags & clientIsLocal = " + (flags & clientIsLocal));
+        System.out.println("flags & serverIsLocal = " + (flags & serverIsLocal)+"\n\n");
 
-        common_flags = 16400L;
+        flags = 16400L;
 
-        System.out.println("common_flags & clientIsLocal = " + (common_flags & clientIsLocal));
-        System.out.println("common_flags & serverIsLocal = " + (common_flags & serverIsLocal)+"\n\n");
+        System.out.println("flags & clientIsLocal = " + (flags & clientIsLocal));
+        System.out.println("flags & serverIsLocal = " + (flags & serverIsLocal)+"\n\n");
 
-        common_flags = 1062135466L;
+        flags = 24712L;
 
-        System.out.println("common_flags & clientIsLocal = " + (common_flags & 128));
-        System.out.println("common_flags & serverIsLocal = " + (common_flags & 256)+"\n\n");
+        System.out.println("flags & c2s = " + (flags & 8192));
+        System.out.println("flags & s2c = " + (flags & 16384));
+        System.out.println("flags & Bidirectional = " + (flags & 32768));
 
-        if ((0L & clientIsLocal) == 0L){
-            System.out.println("yes");
-        }else {
-            System.out.println("no");
-        }
     }
 
 }
