@@ -70,4 +70,10 @@ public class MergeConfigs {
                     .defaultValue("application_protocol_stat")
                     .withDescription("The data identification.");
 
+
+    public static final ConfigOption<String> JOB_NAME =
+            ConfigOptions.key("job.name")
+                    .stringType()
+                    .defaultValue("agg_app_protocol_traffic")
+                    .withDescription("The flink job name.");
 }

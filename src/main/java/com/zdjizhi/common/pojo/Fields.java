@@ -26,9 +26,8 @@ public class Fields {
     private long s2c_tcp_retransmitted_pkts;
     private long c2s_tcp_retransmitted_bytes;
     private long s2c_tcp_retransmitted_bytes;
-    private String client_ip_sketch;
 
-    public Fields(long sessions, long in_bytes, long out_bytes, long in_pkts, long out_pkts, long c2s_pkts, long s2c_pkts, long c2s_bytes, long s2c_bytes, long c2s_fragments, long s2c_fragments, long c2s_tcp_lost_bytes, long s2c_tcp_lost_bytes, long c2s_tcp_ooorder_pkts, long s2c_tcp_ooorder_pkts, long c2s_tcp_retransmitted_pkts, long s2c_tcp_retransmitted_pkts, long c2s_tcp_retransmitted_bytes, long s2c_tcp_retransmitted_bytes, String client_ip_sketch) {
+    public Fields(long sessions, long in_bytes, long out_bytes, long in_pkts, long out_pkts, long c2s_pkts, long s2c_pkts, long c2s_bytes, long s2c_bytes, long c2s_fragments, long s2c_fragments, long c2s_tcp_lost_bytes, long s2c_tcp_lost_bytes, long c2s_tcp_ooorder_pkts, long s2c_tcp_ooorder_pkts, long c2s_tcp_retransmitted_pkts, long s2c_tcp_retransmitted_pkts, long c2s_tcp_retransmitted_bytes, long s2c_tcp_retransmitted_bytes) {
         this.sessions = sessions;
         this.in_bytes = in_bytes;
         this.out_bytes = out_bytes;
@@ -48,7 +47,6 @@ public class Fields {
         this.s2c_tcp_retransmitted_pkts = s2c_tcp_retransmitted_pkts;
         this.c2s_tcp_retransmitted_bytes = c2s_tcp_retransmitted_bytes;
         this.s2c_tcp_retransmitted_bytes = s2c_tcp_retransmitted_bytes;
-        this.client_ip_sketch = client_ip_sketch;
     }
 
     public long getSessions() {
@@ -201,14 +199,6 @@ public class Fields {
 
     public void setS2c_tcp_retransmitted_bytes(long s2c_tcp_retransmitted_bytes) {
         this.s2c_tcp_retransmitted_bytes = s2c_tcp_retransmitted_bytes;
-    }
-
-    public String getClient_ip_sketch() {
-        return client_ip_sketch;
-    }
-
-    public void setClient_ip_sketch(String client_ip_sketch) {
-        this.client_ip_sketch = client_ip_sketch;
     }
 
 }

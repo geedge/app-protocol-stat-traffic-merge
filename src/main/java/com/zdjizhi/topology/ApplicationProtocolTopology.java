@@ -85,7 +85,7 @@ public class ApplicationProtocolTopology {
                     config.get(SINK_KAFKA_TOPIC),
                     config.get(LOG_FAILURES_ONLY)));
 
-            environment.execute("APP-PROTOCOL-STAT-TRAFFIC-MERGE");
+            environment.execute(config.get(JOB_NAME));
         } catch (Exception e) {
             logger.error("This Flink task start ERROR! Exception information is :");
             e.printStackTrace();
