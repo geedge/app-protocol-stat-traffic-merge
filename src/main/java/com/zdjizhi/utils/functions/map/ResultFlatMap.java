@@ -3,9 +3,6 @@ package com.zdjizhi.utils.functions.map;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
-import com.zdjizhi.common.config.GlobalConfig;
-import com.zdjizhi.common.pojo.Fields;
 import com.zdjizhi.common.pojo.Metrics;
 import com.zdjizhi.common.pojo.Tags;
 import com.zdjizhi.utils.StringUtil;
@@ -20,9 +17,14 @@ import org.apache.flink.util.Collector;
  */
 public class ResultFlatMap implements FlatMapFunction<Metrics, String> {
     private static final Log logger = LogFactory.get();
+    /**
+     * 协议分隔符，需要转义
+     */
+    private static final String PROTOCOL_SPLITTER = "\\.";
+
 
     @Override
-    public void flatMap(Metrics metrics, Collector<String> out) throws Exception {
+    public void flatMap(Metrics metrics, Collector<String> out) {
         try {
             Tags tags = metrics.getTags();
             String protocolStackId = tags.getProtocol_stack_id();
@@ -30,7 +32,7 @@ public class ResultFlatMap implements FlatMapFunction<Metrics, String> {
             tags.setApp_name(null);
 
             StringBuilder stringBuilder = new StringBuilder();
-            String[] protocolIds = protocolStackId.split(GlobalConfig.PROTOCOL_SPLITTER);
+            String[] protocolIds = protocolStackId.split(PROTOCOL_SPLITTER);
             int protocolIdsNum = protocolIds.length;
             for (int i = 0; i < protocolIdsNum - 1; i++) {
                 if (StringUtil.isBlank(stringBuilder.toString())) {

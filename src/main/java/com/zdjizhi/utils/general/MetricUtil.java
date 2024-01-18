@@ -2,13 +2,7 @@ package com.zdjizhi.utils.general;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import com.zdjizhi.common.config.GlobalConfig;
 import com.zdjizhi.common.pojo.Fields;
-import com.zdjizhi.utils.StringUtil;
-import org.apache.datasketches.hll.HllSketch;
-import org.apache.datasketches.hll.Union;
-
-import java.util.Base64;
 
 
 /**
@@ -19,8 +13,6 @@ import java.util.Base64;
  */
 public class MetricUtil {
     private static final Log logger = LogFactory.get();
-    private static final String METRICS_DEFAULT_TYPE = "agent";
-
 
     /**
      * 用于对业务指标进行统计
@@ -30,106 +22,66 @@ public class MetricUtil {
      */
     public static Fields statisticsMetrics(Fields cacheData, Fields newData) {
 
-        Long sessions = MetricUtil.longSum(cacheData.getSessions(), newData.getSessions());
+        long sessions = MetricUtil.longSum(cacheData.getSessions(), newData.getSessions());
 
-        Long inBytes = MetricUtil.longSum(cacheData.getIn_bytes(), newData.getIn_bytes());
-        Long outBytes = MetricUtil.longSum(cacheData.getOut_bytes(), newData.getOut_bytes());
-        Long inPkts = MetricUtil.longSum(cacheData.getIn_pkts(), newData.getIn_pkts());
-        Long outPkts = MetricUtil.longSum(cacheData.getOut_pkts(), newData.getOut_pkts());
+        long inBytes = MetricUtil.longSum(cacheData.getIn_bytes(), newData.getIn_bytes());
+        long outBytes = MetricUtil.longSum(cacheData.getOut_bytes(), newData.getOut_bytes());
+        long inPkts = MetricUtil.longSum(cacheData.getIn_pkts(), newData.getIn_pkts());
+        long outPkts = MetricUtil.longSum(cacheData.getOut_pkts(), newData.getOut_pkts());
 
 
-        Long c2sBytes = MetricUtil.longSum(cacheData.getC2s_bytes(), newData.getC2s_bytes());
-        Long s2cBytes = MetricUtil.longSum(cacheData.getS2c_bytes(), newData.getS2c_bytes());
-        Long c2sPkts = MetricUtil.longSum(cacheData.getC2s_pkts(), newData.getC2s_pkts());
-        Long s2cPkts = MetricUtil.longSum(cacheData.getS2c_pkts(), newData.getS2c_pkts());
+        long c2sBytes = MetricUtil.longSum(cacheData.getC2s_bytes(), newData.getC2s_bytes());
+        long s2cBytes = MetricUtil.longSum(cacheData.getS2c_bytes(), newData.getS2c_bytes());
+        long c2sPkts = MetricUtil.longSum(cacheData.getC2s_pkts(), newData.getC2s_pkts());
+        long s2cPkts = MetricUtil.longSum(cacheData.getS2c_pkts(), newData.getS2c_pkts());
 
-        Long c2sFragments = MetricUtil.longSum(cacheData.getC2s_fragments(), newData.getC2s_fragments());
-        Long s2cFragments = MetricUtil.longSum(cacheData.getS2c_fragments(), newData.getS2c_fragments());
+        long c2sFragments = MetricUtil.longSum(cacheData.getC2s_fragments(), newData.getC2s_fragments());
+        long s2cFragments = MetricUtil.longSum(cacheData.getS2c_fragments(), newData.getS2c_fragments());
 
-        Long c2sTcpLostBytes = MetricUtil.longSum(cacheData.getC2s_tcp_lost_bytes(), newData.getC2s_tcp_lost_bytes());
-        Long s2cTcpLostBytes = MetricUtil.longSum(cacheData.getS2c_tcp_lost_bytes(), newData.getS2c_tcp_lost_bytes());
+        long c2sTcpLostBytes = MetricUtil.longSum(cacheData.getC2s_tcp_lost_bytes(), newData.getC2s_tcp_lost_bytes());
+        long s2cTcpLostBytes = MetricUtil.longSum(cacheData.getS2c_tcp_lost_bytes(), newData.getS2c_tcp_lost_bytes());
 
-        Long c2sTcpooorderPkts = MetricUtil.longSum(cacheData.getC2s_tcp_ooorder_pkts(), newData.getC2s_tcp_ooorder_pkts());
-        Long s2cTcpooorderPkts = MetricUtil.longSum(cacheData.getS2c_tcp_ooorder_pkts(), newData.getS2c_tcp_ooorder_pkts());
+        long c2sTcpooorderPkts = MetricUtil.longSum(cacheData.getC2s_tcp_ooorder_pkts(), newData.getC2s_tcp_ooorder_pkts());
+        long s2cTcpooorderPkts = MetricUtil.longSum(cacheData.getS2c_tcp_ooorder_pkts(), newData.getS2c_tcp_ooorder_pkts());
 
-        Long c2sTcpretransmittedPkts = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_pkts(), newData.getC2s_tcp_retransmitted_pkts());
-        Long s2cTcpretransmittedPkts = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_pkts(), newData.getS2c_tcp_retransmitted_pkts());
+        long c2sTcpretransmittedPkts = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_pkts(), newData.getC2s_tcp_retransmitted_pkts());
+        long s2cTcpretransmittedPkts = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_pkts(), newData.getS2c_tcp_retransmitted_pkts());
 
-        Long c2sTcpretransmittedBytes = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes());
-        Long s2cTcpretransmittedBytes = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes());
+        long c2sTcpretransmittedBytes = MetricUtil.longSum(cacheData.getC2s_tcp_retransmitted_bytes(), newData.getC2s_tcp_retransmitted_bytes());
+        long s2cTcpretransmittedBytes = MetricUtil.longSum(cacheData.getS2c_tcp_retransmitted_bytes(), newData.getS2c_tcp_retransmitted_bytes());
 
-        if (METRICS_DEFAULT_TYPE.equals(GlobalConfig.METICS_DATA_SOURCE)) {
-            String clientIpSketch = MetricUtil.hllSketchUnion(cacheData.getClient_ip_sketch(), newData.getClient_ip_sketch());
-            return new Fields(sessions,
-                    inBytes, outBytes, inPkts, outPkts,
-                    c2sPkts, s2cPkts, c2sBytes, s2cBytes,
-                    c2sFragments, s2cFragments,
-                    c2sTcpLostBytes, s2cTcpLostBytes,
-                    c2sTcpooorderPkts, s2cTcpooorderPkts,
-                    c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
-                    c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
-                    clientIpSketch);
-        } else {
-            return new Fields(sessions,
-                    inBytes, outBytes, inPkts, outPkts,
-                    c2sPkts, s2cPkts, c2sBytes, s2cBytes,
-                    c2sFragments, s2cFragments,
-                    c2sTcpLostBytes, s2cTcpLostBytes,
-                    c2sTcpooorderPkts, s2cTcpooorderPkts,
-                    c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
-                    c2sTcpretransmittedBytes, s2cTcpretransmittedBytes,
-                    null);
-        }
+        return new Fields(sessions,
+                inBytes, outBytes, inPkts, outPkts,
+                c2sPkts, s2cPkts, c2sBytes, s2cBytes,
+                c2sFragments, s2cFragments,
+                c2sTcpLostBytes, s2cTcpLostBytes,
+                c2sTcpooorderPkts, s2cTcpooorderPkts,
+                c2sTcpretransmittedPkts, s2cTcpretransmittedPkts,
+                c2sTcpretransmittedBytes, s2cTcpretransmittedBytes);
     }
 
     /**
      * Long类型的数据求和
      *
-     * @param value1 第一个值
-     * @param value2 第二个值
-     * @return value1 + value2
+     * @param cacheData 缓存中的值
+     * @param newData   新来数据的值
+     * @return cacheData + newData
      */
-    private static Long longSum(Long value1, Long value2) {
-        Long result;
+    private static long longSum(long cacheData, long newData) {
+
+        long result;
         try {
-            if (value1 >= 0 && value2 >= 0) {
-                result = value1 + value2;
+            if (cacheData >= 0 && newData >= 0) {
+                result = cacheData + newData;
             } else {
-                result = value1;
+                result = cacheData;
             }
         } catch (RuntimeException e) {
-            logger.error("Abnormal sending of traffic indicator statistics! The message is:" + e.getMessage());
-            result = value1;
+            logger.error("Abnormal sending of traffic indicator statistics! The message is:{}", e);
+            result = cacheData;
         }
         return result;
 
-    }
-
-    /**
-     * @param cacheHll 缓存的sketch
-     * @param newHll   聚合后的sketch
-     * @return 合并后的sketch
-     */
-    private static String hllSketchUnion(String cacheHll, String newHll) {
-        Union union = new Union(12);
-        try {
-            if (StringUtil.isNotBlank(cacheHll)) {
-                byte[] cacheHllBytes = Base64.getDecoder().decode(cacheHll);
-                HllSketch cacheSketch = HllSketch.heapify(cacheHllBytes);
-                union.update(cacheSketch);
-            }
-
-            if (StringUtil.isNotBlank(newHll)) {
-                byte[] newHllBytes = Base64.getDecoder().decode(newHll);
-                HllSketch newSketch = HllSketch.heapify(newHllBytes);
-                union.update(newSketch);
-            }
-            return Base64.getEncoder().encodeToString(union.getResult().toUpdatableByteArray());
-
-        } catch (RuntimeException e) {
-            logger.error("Merge hllSketch results abnormal! The message is:" + e.getMessage());
-            return null;
-        }
     }
 
 }
