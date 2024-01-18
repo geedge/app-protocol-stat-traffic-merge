@@ -16,21 +16,22 @@ Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到�
 
 ### 2.基于Tags内容进行分组统计。
 
-### 3.拆分protocol_stack_id协议树为多个节点
+### 3.拆分protocol_stack_id协议树为多个节点，例如：ETHERNET.IPv4.TCP.https.kingsoft.wps_office，每个节点ID为
 
-#### 例如，ETHERNET.IPv4.TCP.https.kingsoft.wps_office，每个节点ID为：
+1. ETHERNET  
+2. ETHERNET.IPv4  
+3. ETHERNET.IPv4.TCP  
+4. ETHERNET.IPv4.TCP.https  
+5. ETHERNET.IPv4.TCP.https.kingsoft  
+6. ETHERNET.IPv4.TCP.https.kingsoft.wps_office
 
-##### ETHERNET
+#### 为避免展示重复的协议，拆分应去除Decoded Path（最后一个元素）与 Application（第一个元素）重复的基础协议，例如：{"protocol_label": "ETHERNET.IPv4.TCP.dns","app_full_path": "dns"}  
 
-##### ETHERNET.IPv4
-
-##### ETHERNET.IPv4.TCP
-
-##### ETHERNET.IPv4.TCP.https
-
-##### ETHERNET.IPv4.TCP.https.kingsoft
-
-##### ETHERNET.IPv4.TCP.https.kingsoft.wps_office
+1. ETHERNET  
+2. ETHERNET.IPv4  
+3. ETHERNET.IPv4.TCP  
+4. ETHERNET.IPv4.TCP.dns  
+##### 将protocol_label内最后的一个基础协议去除  
 
 ### 4.app_name仅在终端节点输出。
 
