@@ -28,20 +28,41 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
                     Tags tags = JSONObject.parseObject(originalLog.getString("tags"), Tags.class);
                     Long timestamp_ms = originalLog.getLong("timestamp_ms");
 
-                    String appFullPath = tags.getApp_name();
-                    if (StringUtil.isNotBlank(appFullPath)) {
-                        String appName = appFullPath.substring(appFullPath.lastIndexOf(".") + 1);
-                        String protocolLabel = tags.getProtocol_stack_id();
-
-                        tags.setApp_name(appName);
-                        tags.setProtocol_stack_id(protocolLabel.concat(".").concat(appFullPath));
-                    }
+                    joinProtocol(tags);
 
                     out.collect(new Tuple3<>(tags, fields, timestamp_ms));
                 }
             }
         } catch (RuntimeException e) {
             logger.error("Parsing application_protocol_stat data is abnormal! The exception message is: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 避免计算重复的协议，去除Decoded Path（最后一个元素） 与 Application（第一个元素）重复的基础协议。
+     *
+     * @param tags
+     */
+    private static void joinProtocol(Tags tags) {
+        String appFullPath = tags.getApp_name();
+
+        if (StringUtil.isNotBlank(appFullPath)) {
+            String appName = appFullPath.substring(appFullPath.lastIndexOf(".") + 1);
+            tags.setApp_name(appName);
+
+            String protocolLabel = tags.getProtocol_stack_id();
+
+            String endProtocol = protocolLabel.substring(protocolLabel.lastIndexOf(".") + 1);
+
+            String[] appSplits = appFullPath.split("\\.");
+
+            String firstAppProtocol = appSplits[0];
+
+            if (endProtocol.equals(firstAppProtocol)) {
+                tags.setProtocol_stack_id(protocolLabel.substring(0, protocolLabel.lastIndexOf(".")).concat(".").concat(appFullPath));
+            } else {
+                tags.setProtocol_stack_id(protocolLabel.concat(".").concat(appFullPath));
+            }
         }
     }
 }

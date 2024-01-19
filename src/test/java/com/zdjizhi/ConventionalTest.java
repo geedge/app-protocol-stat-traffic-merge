@@ -72,4 +72,26 @@ public class ConventionalTest {
         System.out.println(protocol.concat(".").concat(app));
 
     }
+
+    @Test
+    public void removeDuplicateProtocolTest() {
+        String str = "[.]";
+        String protocol = "ETHERNET.IPv4.TCP.http";
+        String[] protocolSplits = protocol.split(str);
+        String endProtocol = protocolSplits[protocolSplits.length -1];
+        System.out.println(endProtocol);
+
+        String app = "http.test";
+        String[] appSplits = app.split(str);
+        String firstAppProtocol = appSplits[0];
+        System.out.println(firstAppProtocol);
+
+
+        System.out.println(app.substring(app.lastIndexOf(".") + 1));
+        System.out.println(app.lastIndexOf(".") + 1);
+        System.out.println(protocol.substring(0,protocol.lastIndexOf(".")));
+
+    }
+
+
 }

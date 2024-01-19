@@ -15,7 +15,7 @@ import java.util.Properties;
 public class KafkaProducer {
 
     public static FlinkKafkaProducer<String> getKafkaProducer(Properties properties, String topic, boolean logFailuresOnly) {
-        setDefaultConfig(properties, "ack", 1);
+        setDefaultConfig(properties, "ack", "1");
         setDefaultConfig(properties, "retries", 0);
         setDefaultConfig(properties, "linger.ms", 10);
         setDefaultConfig(properties, "request.timeout.ms", 30000);
