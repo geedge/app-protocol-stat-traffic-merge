@@ -28,9 +28,11 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
                     Tags tags = JSONObject.parseObject(originalLog.getString("tags"), Tags.class);
                     Long timestamp_ms = originalLog.getLong("timestamp_ms");
 
-                    joinProtocol(tags);
+                    if (StringUtil.isNotBlank(tags.getProtocol_stack_id())) {
+                        joinProtocol(tags);
 
-                    out.collect(new Tuple3<>(tags, fields, timestamp_ms));
+                        out.collect(new Tuple3<>(tags, fields, timestamp_ms));
+                    }
                 }
             }
         } catch (RuntimeException e) {
