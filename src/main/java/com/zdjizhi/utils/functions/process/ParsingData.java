@@ -15,6 +15,18 @@ import org.apache.flink.util.Collector;
 public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Long>> {
     private static final Log logger = LogFactory.get();
 
+    /**
+     * 适配TSG 24.02日志重组前数据结构，待过期后删除此处代码
+     */
+    @Deprecated
+    private static final String LEGACY_PROTOCOL_KEY_NAME = "protocol_label";
+
+    /**
+     * 适配TSG 24.02日志重组前数据结构，待过期后删除此处代码
+     */
+    @Deprecated
+    private static final String LEGACY_APP_KEY_NAME = "app_full_path";
+
     private static final String dataTypeExpr = "[?(@.name = 'traffic_application_protocol_stat')]";
 
     @Override
@@ -24,6 +36,10 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
                 Object isProtocolData = JSONPath.eval(value, dataTypeExpr);
                 if (isProtocolData != null) {
                     JSONObject originalLog = JSON.parseObject(value);
+
+                    //适配TSG 24.02日志重组前数据结构，待过期后删除此处代码
+                    supportingLegacyField(originalLog);
+
                     Fields fields = JSONObject.parseObject(originalLog.getString("fields"), Fields.class);
                     Tags tags = JSONObject.parseObject(originalLog.getString("tags"), Tags.class);
                     Long timestamp_ms = originalLog.getLong("timestamp_ms");
@@ -37,6 +53,27 @@ public class ParsingData extends ProcessFunction<String, Tuple3<Tags, Fields, Lo
             }
         } catch (RuntimeException e) {
             logger.error("Parsing application_protocol_stat data is abnormal! The exception message is: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 适配TSG 24.02日志重组前数据结构，在不改变原有逻辑情况下将
+     * protocol_label 修改为 decoded_path
+     * app_full_path 修改为 app
+     * <p>
+     * 待过期后删除此处代码
+     *
+     * @param originalLog 原始Metrics日志
+     */
+    @Deprecated
+    private static void supportingLegacyField(JSONObject originalLog) {
+        JSONObject tags = originalLog.getJSONObject("tags");
+        if (tags.containsKey(LEGACY_PROTOCOL_KEY_NAME)) {
+            tags.put("decoded_path", tags.remove(LEGACY_PROTOCOL_KEY_NAME));
+
+            tags.put("app", tags.remove(LEGACY_APP_KEY_NAME));
+
+            originalLog.put("tags", originalLog.remove("tags"));
         }
     }
 
