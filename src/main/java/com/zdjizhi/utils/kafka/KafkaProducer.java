@@ -15,7 +15,7 @@ import java.util.Properties;
 public class KafkaProducer {
 
     public static FlinkKafkaProducer<String> getKafkaProducer(Properties properties, String topic, boolean logFailuresOnly) {
-        setDefaultConfig(properties, "ack", "1");
+        setDefaultConfig(properties, "acks", "1");
         setDefaultConfig(properties, "retries", 0);
         setDefaultConfig(properties, "linger.ms", 10);
         setDefaultConfig(properties, "request.timeout.ms", 30000);
@@ -29,7 +29,7 @@ public class KafkaProducer {
                 new SimpleStringSchema(),
                 properties, Optional.empty());
 
-        kafkaProducer.setLogFailuresOnly(logFailuresOnly);
+        kafkaProducer.setLogFailuresOnly(false);
 
         return kafkaProducer;
     }
