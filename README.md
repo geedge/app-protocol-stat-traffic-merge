@@ -1,10 +1,10 @@
 # app-protocol-stat-traffic-merge
 
-Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到协议与应用统计表中，使用增量窗口计算，统计周期5秒，watermark5秒。
+Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到协议与应用统计表中，使用增量窗口计算，默认统计周期1秒，watermark1秒。
 
 ## 数据源    
 
-以下不论基于哪种计算，Topic均为NETWORK-TRAFFIC-METRICS 
+以下不论基于哪种计算，Topic均为NETWORK-TRAFFIC-METRIC 
 
 ### 1.app-protocol-stat-traffic-agent程序基于已关闭/过渡会话日志统计Application and Protocol Metrics，聚合粒度为1秒。（TSG 23.05版本）  
 
@@ -16,7 +16,11 @@ Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到�
 
 ### 2.基于Tags内容进行分组统计。
 
-### 3.拆分protocol_stack_id协议树为多个节点，例如：ETHERNET.IPv4.TCP.https.kingsoft.wps_office，每个节点ID为
+### 3.将原始Metrics中的decoded_path和app进行拼接,例如：{"decoded_path": "ETHERNET.IPv4.TCP.https","app": "kingsoft.wps_office"}
+
+ 拼接后结果：ETHERNET.IPv4.TCP.https.kingsoft.wps_office
+
+### 4.拆分protocol_stack_id协议树为多个节点，例如：ETHERNET.IPv4.TCP.https.kingsoft.wps_office，每个节点ID为
 
 1. ETHERNET  
 2. ETHERNET.IPv4  
@@ -25,17 +29,17 @@ Live Traffic Chart统计程序，基于协议栈拆分多流聚合，存储到�
 5. ETHERNET.IPv4.TCP.https.kingsoft  
 6. ETHERNET.IPv4.TCP.https.kingsoft.wps_office
 
-#### 为避免展示重复的协议，拆分应去除Decoded Path（最后一个元素）与 Application（第一个元素）重复的基础协议，例如：{"protocol_label": "ETHERNET.IPv4.TCP.dns","app_full_path": "dns"}  
+#### 4.1 为避免展示重复的协议，拆分应去除Decoded Path（最后一个元素）与 app（第一个元素）重复的基础协议，例如：{"decoded_path": "ETHERNET.IPv4.TCP.dns","app": "dns"}  
+##### 将decoded_path内最后的一个基础协议去除  
 
 1. ETHERNET  
 2. ETHERNET.IPv4  
 3. ETHERNET.IPv4.TCP  
 4. ETHERNET.IPv4.TCP.dns  
-##### 将protocol_label内最后的一个基础协议去除  
 
-### 4.app_name仅在终端节点输出。
+### 5.app_name仅在终端节点输出。
 
-### 5.输出结果时Measurement Name=application_protocol_stat。
+### 6.输出结果时Measurement Name=application_protocol_stat。
 
 <br/>
 
