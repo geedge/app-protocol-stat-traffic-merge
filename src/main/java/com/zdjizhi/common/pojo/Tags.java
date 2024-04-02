@@ -61,7 +61,7 @@ public class Tags {
         return protocol_stack_id;
     }
 
-    @JSONField(name = "protocol_label")
+    @JSONField(name = "decoded_path")
     public void setProtocol_stack_id(String protocol_stack_id) {
         this.protocol_stack_id = protocol_stack_id;
     }
@@ -70,7 +70,7 @@ public class Tags {
         return app_name;
     }
 
-    @JSONField(name = "app_full_path")
+    @JSONField(name = "app")
     public void setApp_name(String app_name) {
         this.app_name = app_name;
     }
