@@ -21,10 +21,6 @@ public class KafkaConsumer {
      */
     public static FlinkKafkaConsumer<String> getKafkaConsumer(Properties properties, String topic, String startupMode) {
 
-        setDefaultConfig(properties, ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 60000);
-        setDefaultConfig(properties, ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 5000);
-        setDefaultConfig(properties, ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 31457280);
-
         FlinkKafkaConsumer<String> kafkaConsumer = new FlinkKafkaConsumer<>(topic, new SimpleStringSchema(), properties);
 
         switch (startupMode) {
@@ -42,11 +38,5 @@ public class KafkaConsumer {
         }
 
         return kafkaConsumer;
-    }
-
-    private static void setDefaultConfig(Properties properties, String key, Object value) {
-        if (!properties.contains(key)) {
-            properties.put(key, value);
-        }
     }
 }
