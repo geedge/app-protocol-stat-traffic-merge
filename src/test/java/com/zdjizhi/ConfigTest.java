@@ -19,15 +19,15 @@ public class ConfigTest {
 
         final ParameterTool tool;
         try {
-            tool = ParameterTool.fromPropertiesFile("D:\\workerspace\\flink\\test.properties");
+            tool = ParameterTool.fromPropertiesFile("/Users/darnell/IdeaProjects/app-protocol-stat-traffic-merge/properties/application.properties");
             final Configuration config = tool.getConfiguration();
             environment.getConfig().setGlobalJobParameters(config);
             final FusionConfiguration fusionConfiguration = new FusionConfiguration(config);
 
             System.out.println(config.get(SOURCE_KAFKA_TOPIC));
             System.out.println(config.get(SINK_KAFKA_TOPIC));
-            System.out.println(fusionConfiguration.getProperties(SOURCE_KAFKA_PROPERTIES_PREFIX));
-            System.out.println(fusionConfiguration.getProperties(SINK_KAFKA_PROPERTIES_PREFIX));
+            System.out.println("#####"+ fusionConfiguration.getProperties( SOURCE_KAFKA_PROPERTIES_PREFIX));
+            System.out.println("#####"+ fusionConfiguration.getProperties(SINK_KAFKA_PROPERTIES_PREFIX));
 
 
             final FlinkKafkaConsumer<String> kafkaConsumer = new FlinkKafkaConsumer<>(
