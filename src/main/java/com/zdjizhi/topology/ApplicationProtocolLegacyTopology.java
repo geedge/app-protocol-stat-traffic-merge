@@ -52,7 +52,7 @@ public class ApplicationProtocolLegacyTopology {
             final Configuration config = tool.getConfiguration();
             environment.getConfig().setGlobalJobParameters(config);
             final MergeConfiguration fusionConfiguration = new MergeConfiguration(config);
-            
+
             //水印
             WatermarkStrategy<Tuple3<Tags, Fields, Long>> strategyForSession = WatermarkStrategy
                     .<Tuple3<Tags, Fields, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(config.get(WARTERMARK_MAX_ORDERNESS)))
