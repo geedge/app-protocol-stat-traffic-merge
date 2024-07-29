@@ -51,7 +51,6 @@ public class ApplicationProtocolTopology {
         }
 
         final StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
-        environment.setParallelism(1);
 
         ParameterTool tool = ParameterTool.fromPropertiesFile(args[0]);
         final Configuration config = tool.getConfiguration();
