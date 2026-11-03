@@ -36,7 +36,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flink.version>1.13.1</flink.version>
         <kafka.version>1.0.0</kafka.version>
-        <hutool.version>5.7.17</hutool.version>
+        <hutool.version>5.8.21</hutool.version>
         <datasketches.version>3.2.0</datasketches.version>
         <jasypt.version>1.9.3</jasypt.version>
         <zdjz.tools.version>1.0.8</zdjz.tools.version>
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
